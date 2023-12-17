@@ -57,3 +57,16 @@ func AddSong(song *models.Song) (*models.Song, error) {
 
 	return song, nil
 }
+
+func UpdateSong(song *models.Song) (*models.Song, error) {
+	err := repository.EditSong(song)
+	if err != nil {
+		logrus.Errorf("erreur lors de la mise à jour de la chanson : %s", err.Error())
+		return nil, &models.CustomError{
+			Message: "Échec de la mise à jour de la chanson",
+			Code:    http.StatusInternalServerError,
+		}
+	}
+
+	return song, nil
+}
