@@ -10,7 +10,7 @@ import (
 )
 
 // GetAllSongs récupère toutes les chansons.
-func GetAllSongs(w http.ResponseWriter, _ *http.Request) {
+func GetSongs(w http.ResponseWriter, _ *http.Request) {
 	// Appel du service
 	songs, err := songs.GetAllSongs()
 	if err != nil {

@@ -11,7 +11,7 @@ import (
 )
 
 // GetSongByID récupère une chanson par son ID.
-func GetSongByID(w http.ResponseWriter, r *http.Request) {
+func GetSong(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	songID, _ := ctx.Value("songID").(uuid.UUID)
 
