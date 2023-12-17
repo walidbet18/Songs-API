@@ -10,5 +10,5 @@ type Song struct {
 	Artist      string     `json:"artist"`
 	Type        string     `json:"type"` // Type peut être un genre musical par exemple
 	Duration    string     `json:"duration"`
-	ReleaseYear int        `json:"release_year"`
+	ReleaseYear int        `json:"releaseyear"`
 }

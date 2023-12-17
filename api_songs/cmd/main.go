@@ -42,7 +42,7 @@ func init() {
             artist VARCHAR(100) NOT NULL,
             type VARCHAR(50) NOT NULL,
             duration VARCHAR(20) NOT NULL,
-            release_year INT NOT NULL
+            releaseyear INT NOT NULL
         )`,
 	}
 

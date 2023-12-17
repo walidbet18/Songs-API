@@ -66,7 +66,7 @@ func AddSong(song *models.Song) error {
 	}
 
 	// Convertir UUID en chaîne avant de l'insérer dans la base de données
-	_, err = db.Exec("INSERT INTO songs (id, title, artist, type, duration, release_year) VALUES (?, ?, ?, ?, ?, ?)",
+	_, err = db.Exec("INSERT INTO songs (id, title, artist, type, duration, releaseyear) VALUES (?, ?, ?, ?, ?, ?)",
 		id.String(), song.Title, song.Artist, song.Type, song.Duration, song.ReleaseYear)
 	if err != nil {
 		return err
@@ -82,8 +82,23 @@ func EditSong(song *models.Song) error {
 	}
 	defer helpers.CloseDB(db)
 
-	_, err = db.Exec("UPDATE songs SET title = ?, artist = ?, type = ?, duration = ?, release_year = ? WHERE id = ?",
+	_, err = db.Exec("UPDATE songs SET title = ?, artist = ?, type = ?, duration = ?, releaseyear = ? WHERE id = ?",
 		song.Title, song.Artist, song.Type, song.Duration, song.ReleaseYear, song.ID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func DeleteSong(songID uuid.UUID) error {
+	db, err := helpers.OpenDB()
+	if err != nil {
+		return err
+	}
+	defer helpers.CloseDB(db)
+
+	_, err = db.Exec("DELETE FROM songs WHERE id = ?", songID)
 	if err != nil {
 		return err
 	}
