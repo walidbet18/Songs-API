@@ -44,3 +44,16 @@ func GetSongByID(id uuid.UUID) (*models.Song, error) {
 
 	return song, err
 }
+
+func AddSong(song *models.Song) (*models.Song, error) {
+	err := repository.AddSong(song)
+	if err != nil {
+		logrus.Errorf("erreur lors de l'ajout de la chanson : %s", err.Error())
+		return nil, &models.CustomError{
+			Message: "Échec de l'ajout de la chanson",
+			Code:    http.StatusInternalServerError,
+		}
+	}
+
+	return song, nil
+}
