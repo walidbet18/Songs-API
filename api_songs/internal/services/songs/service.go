@@ -70,3 +70,16 @@ func UpdateSong(song *models.Song) (*models.Song, error) {
 
 	return song, nil
 }
+
+func DeleteSong(id uuid.UUID) error {
+	err := repository.DeleteSong(id)
+	if err != nil {
+		logrus.Errorf("Erreur lors de la suppression de la chanson : %s", err.Error())
+		return &models.CustomError{
+			Message: "Échec de la suppression de la chanson",
+			Code:    http.StatusInternalServerError,
+		}
+	}
+
+	return nil
+}
