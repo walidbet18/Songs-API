@@ -74,3 +74,19 @@ func AddSong(song *models.Song) error {
 
 	return nil
 }
+
+func EditSong(song *models.Song) error {
+	db, err := helpers.OpenDB()
+	if err != nil {
+		return err
+	}
+	defer helpers.CloseDB(db)
+
+	_, err = db.Exec("UPDATE songs SET title = ?, artist = ?, type = ?, duration = ?, release_year = ? WHERE id = ?",
+		song.Title, song.Artist, song.Type, song.Duration, song.ReleaseYear, song.ID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
