@@ -12,9 +12,9 @@ func GetAllSongs() ([]models.Song, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer helpers.CloseDB(db)
 
 	rows, err := db.Query("SELECT * FROM songs")
+	defer helpers.CloseDB(db)
 	if err != nil {
 		return nil, err
 	}
@@ -40,16 +40,15 @@ func GetSongByID(id uuid.UUID) (*models.Song, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	row := db.QueryRow("SELECT * FROM songs WHERE id=?", id)
+
 	defer helpers.CloseDB(db)
-
-	row := db.QueryRow("SELECT * FROM songs WHERE id=?", id.String())
-
 	var song models.Song
 	err = row.Scan(&song.ID, &song.Title, &song.Artist, &song.Type, &song.Duration, &song.ReleaseYear)
 	if err != nil {
 		return nil, err
 	}
-
 	return &song, nil
 }
 
@@ -58,16 +57,18 @@ func AddSong(song *models.Song) error {
 	if err != nil {
 		return err
 	}
-	defer helpers.CloseDB(db)
 
-	id, err := uuid.NewV4() // Générer un nouvel UUID
 	if err != nil {
 		return err
 	}
+	id, err := uuid.NewV4() // Générer un nouvel UUID
 
 	// Convertir UUID en chaîne avant de l'insérer dans la base de données
 	_, err = db.Exec("INSERT INTO songs (id, title, artist, type, duration, releaseyear) VALUES (?, ?, ?, ?, ?, ?)",
 		id.String(), song.Title, song.Artist, song.Type, song.Duration, song.ReleaseYear)
+
+	defer helpers.CloseDB(db)
+
 	if err != nil {
 		return err
 	}
@@ -80,10 +81,11 @@ func EditSong(song *models.Song) error {
 	if err != nil {
 		return err
 	}
-	defer helpers.CloseDB(db)
 
 	_, err = db.Exec("UPDATE songs SET title = ?, artist = ?, type = ?, duration = ?, releaseyear = ? WHERE id = ?",
 		song.Title, song.Artist, song.Type, song.Duration, song.ReleaseYear, song.ID)
+
+	defer helpers.CloseDB(db)
 	if err != nil {
 		return err
 	}
@@ -96,9 +98,9 @@ func DeleteSong(songID uuid.UUID) error {
 	if err != nil {
 		return err
 	}
-	defer helpers.CloseDB(db)
 
 	_, err = db.Exec("DELETE FROM songs WHERE id = ?", songID)
+	defer helpers.CloseDB(db)
 	if err != nil {
 		return err
 	}

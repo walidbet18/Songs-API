@@ -10,14 +10,13 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// GetSongByID récupère une chanson par son ID.
+// GetSong récupère une chanson par son ID.
 func GetSong(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	songID, _ := ctx.Value("songID").(uuid.UUID)
-
 	song, err := songs.GetSongByID(songID)
 	if err != nil {
-		logrus.Errorf("erreur : %s", err.Error())
+		logrus.Errorf("Erreur : %s", err.Error())
 		customError, isCustom := err.(*models.CustomError)
 		if isCustom {
 			w.WriteHeader(customError.Code)

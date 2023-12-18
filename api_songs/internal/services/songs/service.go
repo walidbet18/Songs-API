@@ -31,14 +31,14 @@ func GetSongByID(id uuid.UUID) (*models.Song, error) {
 	if err != nil {
 		if err.Error() == sql.ErrNoRows.Error() {
 			return nil, &models.CustomError{
-				Message: "Chanson non trouvée",
+				Message: "Chanson introuvable",
 				Code:    http.StatusNotFound,
 			}
 		}
-		logrus.Errorf("erreur lors de la récupération de la chanson : %s", err.Error())
+		logrus.Errorf("Erreur lors de la récupération de la chanson : %s", err.Error())
 		return nil, &models.CustomError{
 			Message: "Une erreur s'est produite",
-			Code:    500,
+			Code:    http.StatusInternalServerError,
 		}
 	}
 
